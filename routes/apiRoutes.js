@@ -4,7 +4,10 @@ var fs = require('fs');
 module.exports = function(app) {
     
     app.get('/api/notes', function(req, res) {
-        res.json(notes);
+        fs.readFile("db/db.json", "utf8", function (err, data) {
+            if (err) throw err;
+            res.json(notes);
+        })
     })
 
     app.post('/api/notes', function(req, res) {
@@ -12,7 +15,7 @@ module.exports = function(app) {
         for (i=0; i < notes.length; i++) {
             notes[i].id = i.toString();
         }
-        fs.writeFile('./db/db.json', notes, function(err) {
+        fs.writeFile('db/db.json', notes, function(err) {
             if (err) throw err;
             res.json(JSON.stringify(notes, '', 4));
         })
@@ -25,7 +28,7 @@ module.exports = function(app) {
         }).indexOf(req.params.id);
         notes.splice(index, 1);
 
-        fs.writeFile('./db/db.json', JSON.stringify(notes, '', 4), function(err) {
+        fs.writeFile('db/db.json', JSON.stringify(notes, '', 4), function(err) {
             if (err) throw err;
             res.json(notes);
         })
