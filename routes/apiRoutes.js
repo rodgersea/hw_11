@@ -8,16 +8,13 @@ module.exports = function(app) {
     })
 
     app.post('/api/notes', function(req, res) {
-        console.log('notes:', notes);
         notes.push(req.body);
-        console.log('notes:', notes);
         for (i=0; i < notes.length; i++) {
             notes[i].id = i.toString();
         }
-        notes = JSON.stringify(notes, '', 4);
         fs.writeFile('./db/db.json', notes, function(err) {
             if (err) throw err;
-            res.json(JSON.stringify(notes));
+            res.json(JSON.stringify(notes, '', 4));
         })
     })
 
